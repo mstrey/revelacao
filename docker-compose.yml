@@ -1,0 +1,27 @@
+networks:
+  frontend:
+    name: frontend
+    external: true
+
+services:
+  web:
+    build: .
+    container_name: revelacao
+    volumes:
+      - .:/var/www/html
+      - ./data:/var/www/html/data
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost/list"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=frontend"
+      - "traefik.http.services.${SERVICE}.loadbalancer.server.port=80"
+
+      - "traefik.http.routers.${SERVICE}.rule=Host(`${SERVICE}.${DOMAIN}`)"
+      - "traefik.http.routers.${SERVICE}.entrypoints=web"
+    networks:
+      - frontend
+
