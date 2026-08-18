@@ -9,7 +9,9 @@ $dotenv = Dotenv::createImmutable(__DIR__ . '/../');
 $dotenv->safeLoad();
 
 $storage = new Storage(__DIR__ . '/../data');
-$service = new RevealService($storage);
+$configService = new \App\ConfigService($storage);
+$revealService = new \App\RevealService($storage, $configService);
+$authService = new \App\AuthService($storage);
 
 $requestUri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 
@@ -20,11 +22,74 @@ if (!$deviceId) {
     setcookie('device_id', $deviceId, time() + (86400 * 365), '/');
 }
 
+$protectedRoutes = ['/doctor', '/doctor-success', '/list', '/config'];
+
+if (in_array($requestUri, $protectedRoutes)) {
+    if (!$authService->isRegistered()) {
+        header("Location: /register");
+        exit;
+    }
+    if (!$authService->isLoggedIn()) {
+        header("Location: /login");
+        exit;
+    }
+}
+
+if ($requestUri === '/register') {
+    if ($authService->isRegistered()) {
+        header("Location: /login");
+        exit;
+    }
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        $user = $_POST['username'] ?? '';
+        $pass = $_POST['password'] ?? '';
+        if ($authService->register($user, $pass)) {
+            header("Location: /login");
+            exit;
+        }
+    }
+    require __DIR__ . '/../views/register.php';
+    exit;
+}
+
+if ($requestUri === '/login') {
+    $error = '';
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        $user = $_POST['username'] ?? '';
+        $pass = $_POST['password'] ?? '';
+        if ($authService->login($user, $pass)) {
+            header("Location: /config");
+            exit;
+        } else {
+            $error = 'Credenciais inválidas.';
+        }
+    }
+    require __DIR__ . '/../views/login.php';
+    exit;
+}
+
+if ($requestUri === '/logout') {
+    $authService->logout();
+    header("Location: /login");
+    exit;
+}
+
+if ($requestUri === '/config') {
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        $configService->saveConfig($_POST);
+        header("Location: /config?saved=1");
+        exit;
+    }
+    $configData = $configService->getConfig();
+    require __DIR__ . '/../views/config.php';
+    exit;
+}
+
 if ($requestUri === '/doctor') {
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $gender = $_POST['gender'] ?? '';
         if (in_array($gender, ['boy', 'girl'])) {
-            $service->setGender($gender);
+            $revealService->setGender($gender);
             header("Location: /doctor-success");
             exit;
         }
@@ -39,25 +104,27 @@ if ($requestUri === '/doctor-success') {
 }
 
 if ($requestUri === '/list') {
-    $visitors = $service->getVisitorsList();
+    $visitors = $revealService->getVisitorsList();
     require __DIR__ . '/../views/list.php';
     exit;
 }
 
+$configData = $configService->getConfig();
+
 // Lógica principal para usuários
-if ($service->isCountdownActive()) {
-    $revealDate = $_ENV['REVEAL_DATE'];
+if ($revealService->isCountdownActive()) {
+    $revealDate = $configData['reveal_date'];
     require __DIR__ . '/../views/countdown.php';
     exit;
 }
 
 // Horário passou, processa a fila
-$position = $service->registerDeviceAccess($deviceId);
-$status = $service->getAccessStatus($position);
+$position = $revealService->registerDeviceAccess($deviceId);
+$status = $revealService->getAccessStatus($position);
 
 if ($status === 'winner') {
-    $gender = $service->getGender();
-    $name = $gender === 'boy' ? $_ENV['BOY_NAME'] : $_ENV['GIRL_NAME'];
+    $gender = $revealService->getGender();
+    $name = $gender === 'boy' ? $configData['boy_name'] : $configData['girl_name'];
     require __DIR__ . '/../views/winner.php';
 } elseif ($status === 'waiting') {
     require __DIR__ . '/../views/waiting.php';

@@ -3,6 +3,7 @@ namespace App\Tests;
 
 use PHPUnit\Framework\TestCase;
 use App\RevealService;
+use App\ConfigService;
 use App\Storage;
 
 class RevealServiceTest extends TestCase {
@@ -14,9 +15,16 @@ class RevealServiceTest extends TestCase {
             mkdir($this->testDataDir);
         }
         $storage = new Storage($this->testDataDir);
-        $_ENV['REVEAL_DATE'] = date('Y-m-d H:i:s', strtotime('-1 minute')); // Já passou
-        $_ENV['LUCKY_NUMBER'] = 2;
-        $this->service = new RevealService($storage);
+        
+        $configService = new ConfigService($storage);
+        $configService->saveConfig([
+            'reveal_date' => date('Y-m-d\TH:i'), // Já passou
+            'lucky_number' => 2,
+            'boy_name' => 'Menino Teste',
+            'girl_name' => 'Menina Teste'
+        ]);
+
+        $this->service = new RevealService($storage, $configService);
     }
 
     protected function tearDown(): void {

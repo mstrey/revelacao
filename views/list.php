@@ -1,86 +1,13 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <?php require __DIR__ . '/partials/head.php'; ?>
     <title>Lista de Acessos</title>
-    <style>
-        * {
-            box-sizing: border-box;
-        }
-        body {
-            font-family: sans-serif;
-            margin: 0;
-            padding: 20px;
-            background-color: #f4f7f6;
-            color: #333;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-        h1 {
-            font-size: 1.8rem;
-            color: #444;
-            margin-bottom: 30px;
-            text-align: center;
-        }
-        .table-container {
-            width: 100%;
-            max-width: 800px;
-            background: #fff;
-            border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-            overflow-x: auto;
-            padding: 20px;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            text-align: left;
-            min-width: 500px;
-        }
-        th, td {
-            padding: 15px;
-            border-bottom: 1px solid #eee;
-        }
-        th {
-            background-color: #fafafa;
-            font-weight: bold;
-            color: #555;
-            text-transform: uppercase;
-            font-size: 0.85rem;
-            letter-spacing: 0.5px;
-        }
-        tr:last-child td {
-            border-bottom: none;
-        }
-        tbody tr:hover {
-            background-color: #fcfcfc;
-        }
-        .winner td {
-            background-color: #fff9e6;
-            color: #856404;
-        }
-        .status-badge {
-            display: inline-block;
-            padding: 6px 12px;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            font-weight: bold;
-            background-color: #e2e3e5;
-            color: #383d41;
-        }
-        .winner .status-badge {
-            background-color: #ffeeba;
-            color: #856404;
-        }
-        @media (min-width: 600px) {
-            h1 { font-size: 2.2rem; }
-            .table-container { padding: 30px; }
-        }
-    </style>
+    <link rel="stylesheet" href="/css/list.css?v=<?= filemtime(__DIR__ . '/../public/css/list.css') ?>">
+    <link rel="stylesheet" href="/css/menu.css?v=<?= filemtime(__DIR__ . '/../public/css/menu.css') ?>">
 </head>
-<body>
+<body class="has-menu">
+    <?php require __DIR__ . '/partials/menu.php'; ?>
     <h1>Lista de Dispositivos na Fila</h1>
     <div class="table-container">
         <table>

@@ -1,0 +1,73 @@
+* {
+    box-sizing: border-box;
+}
+body {
+    font-family: sans-serif;
+    margin: 0;
+    padding: 20px;
+    background-color: #f4f7f6;
+    color: #333;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+h1 {
+    font-size: 1.8rem;
+    color: #444;
+    margin-bottom: 30px;
+    text-align: center;
+}
+.table-container {
+    width: 100%;
+    max-width: 800px;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    overflow-x: auto;
+    padding: 20px;
+}
+table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+    min-width: 500px;
+}
+th, td {
+    padding: 15px;
+    border-bottom: 1px solid #eee;
+}
+th {
+    background-color: #fafafa;
+    font-weight: bold;
+    color: #555;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    letter-spacing: 0.5px;
+}
+tr:last-child td {
+    border-bottom: none;
+}
+tbody tr:hover {
+    background-color: #fcfcfc;
+}
+.winner td {
+    background-color: #fff9e6;
+    color: #856404;
+}
+.status-badge {
+    display: inline-block;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: bold;
+    background-color: #e2e3e5;
+    color: #383d41;
+}
+.winner .status-badge {
+    background-color: #ffeeba;
+    color: #856404;
+}
+@media (min-width: 600px) {
+    h1 { font-size: 2.2rem; }
+    .table-container { padding: 30px; }
+}

@@ -3,9 +3,11 @@ namespace App;
 
 class RevealService {
     private Storage $storage;
+    private ConfigService $config;
 
-    public function __construct(Storage $storage) {
+    public function __construct(Storage $storage, ConfigService $config) {
         $this->storage = $storage;
+        $this->config = $config;
     }
 
     public function setGender(string $gender): void {
@@ -18,20 +20,29 @@ class RevealService {
     }
 
     public function isCountdownActive(): bool {
-        $revealDate = strtotime($_ENV['REVEAL_DATE'] ?? 'now');
+        $cfg = $this->config->getConfig();
+        if (empty($cfg['reveal_date'])) {
+            return true;
+        }
+        $revealDate = strtotime($cfg['reveal_date']);
         return time() < $revealDate;
     }
 
     public function registerDeviceAccess(string $deviceId): int {
         $file = $this->storage->dir . '/visitors.json';
-        $fp = fopen($file, 'c+');
+        $fp = @fopen($file, 'c+');
+        if (!$fp) {
+            throw new \RuntimeException("Falha ao abrir visitors.json");
+        }
         
         $position = 0;
+        $cfg = $this->config->getConfig();
+        $luckyNumber = $cfg['lucky_number'];
+
         if (flock($fp, LOCK_EX)) {
             $content = stream_get_contents($fp);
             $visitors = $content ? json_decode($content, true) : [];
             
-            // Verifica se dispositivo já existe
             foreach ($visitors as $v) {
                 if ($v['device_id'] === $deviceId) {
                     $position = $v['position'];
@@ -39,14 +50,13 @@ class RevealService {
                 }
             }
 
-            // Se for novo, adiciona na fila
             if ($position === 0) {
                 $position = count($visitors) + 1;
                 $visitors[] = [
                     'device_id' => $deviceId,
                     'position' => $position,
                     'timestamp' => date('Y-m-d H:i:s'),
-                    'is_winner' => ($position === (int)$_ENV['LUCKY_NUMBER'])
+                    'is_winner' => ($position === $luckyNumber)
                 ];
                 ftruncate($fp, 0);
                 rewind($fp);
@@ -61,7 +71,9 @@ class RevealService {
     }
 
     public function getAccessStatus(int $position): string {
-        $lucky = (int)$_ENV['LUCKY_NUMBER'];
+        $cfg = $this->config->getConfig();
+        $lucky = $cfg['lucky_number'];
+        
         if ($position < $lucky) {
             return 'waiting';
         }
