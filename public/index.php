@@ -119,20 +119,26 @@ switch ($requestUri) {
             exit;
         }
 
-        $position = $revealService->registerDeviceAccess($deviceId);
-        $status = $revealService->getAccessStatus($position);
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $position = $revealService->registerDeviceAccess($deviceId);
+            $status = $revealService->getAccessStatus($position);
 
-        if ($status === 'winner') {
-            $gender = $revealService->getGender();
-            $name = $gender === 'boy' ? $configData['boy_name'] : $configData['girl_name'];
-            require __DIR__ . '/../views/winner.php';
-            exit;
-        } 
-        if ($status === 'waiting') {
-            require __DIR__ . '/../views/waiting.php';
+            if ($status === 'winner') {
+                $gender = $revealService->getGender();
+                $name = $gender === 'boy' ? $configData['boy_name'] : $configData['girl_name'];
+                require __DIR__ . '/../views/winner.php';
+                exit;
+            } 
+            if ($status === 'waiting') {
+                require __DIR__ . '/../views/waiting.php';
+                exit;
+            }
+            
+            require __DIR__ . '/../views/missed.php';
             exit;
         }
-        require __DIR__ . '/../views/missed.php';
+
+        require __DIR__ . '/../views/ready.php';
         exit;
 
     default:
