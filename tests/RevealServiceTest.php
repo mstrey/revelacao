@@ -61,4 +61,15 @@ class RevealServiceTest extends TestCase {
         $this->assertEquals('winner', $this->service->getAccessStatus($pos2));
         $this->assertEquals('missed', $this->service->getAccessStatus($pos3));
     }
+
+    public function testCanClearVisitorsList() {
+        $this->service->registerDeviceAccess('device-1');
+        $this->service->registerDeviceAccess('device-2');
+        
+        $this->assertCount(2, $this->service->getVisitorsList());
+
+        $this->service->clearVisitors();
+        
+        $this->assertCount(0, $this->service->getVisitorsList());
+    }
 }

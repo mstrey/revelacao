@@ -75,3 +75,29 @@ input:focus {
     text-align: center;
     font-weight: bold;
 }
+.danger-zone {
+    margin-top: 30px;
+    padding-top: 25px;
+    border-top: 2px dashed #ffc107;
+}
+.danger-zone h2 {
+    font-size: 1.4rem;
+    color: #d9534f;
+    margin-top: 0;
+    margin-bottom: 10px;
+}
+.btn-danger {
+    background-color: #d9534f;
+}
+.btn-danger:hover {
+    background-color: #c9302c;
+}
+.alert-info {
+    background-color: #d1ecf1;
+    color: #0c5460;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 25px;
+    text-align: center;
+    font-weight: bold;
+}
