@@ -27,7 +27,8 @@ class ConfigServiceTest extends TestCase {
             'reveal_date' => '2026-12-31T23:59',
             'lucky_number' => 5,
             'boy_name' => 'Enzo',
-            'girl_name' => 'Valentina'
+            'girl_name' => 'Valentina',
+            'timezone' => 'America/Manaus'
         ];
 
         $this->service->saveConfig($data);
@@ -37,11 +38,14 @@ class ConfigServiceTest extends TestCase {
         $this->assertEquals(5, $loaded['lucky_number']);
         $this->assertEquals('Enzo', $loaded['boy_name']);
         $this->assertEquals('Valentina', $loaded['girl_name']);
+        $this->assertEquals('America/Manaus', $loaded['timezone']);
     }
 
     public function testReturnsDefaultValuesWhenEmpty() {
         $loaded = $this->service->getConfig();
         $this->assertArrayHasKey('reveal_date', $loaded);
         $this->assertEquals(1, $loaded['lucky_number']);
+        $this->assertEquals('America/Sao_Paulo', $loaded['timezone']);
     }
+    
 }

@@ -12,6 +12,10 @@ $dotenv->safeLoad();
 
 $storage = new Storage(__DIR__ . '/../data');
 $configService = new ConfigService($storage);
+
+$configData = $configService->getConfig();
+date_default_timezone_set($configData['timezone']);
+
 $revealService = new RevealService($storage, $configService);
 $authService = new AuthService($storage);
 
@@ -111,8 +115,6 @@ switch ($requestUri) {
         require __DIR__ . '/../views/list.php';
         exit;
     case '/':
-        $configData = $configService->getConfig();
-
         if ($revealService->isCountdownActive()) {
             $revealDate = $configData['reveal_date'];
             require __DIR__ . '/../views/countdown.php';

@@ -41,6 +41,18 @@
                 <input type="text" id="girl_name" name="girl_name" value="<?= htmlspecialchars($configData['girl_name']) ?>" required aria-required="true">
             </div>
 
+            <div class="form-group">
+                <label for="timezone">Fuso Horário</label>
+                <select id="timezone" name="timezone" required aria-required="true">
+                    <option value="America/Sao_Paulo" <?= $configData['timezone'] === 'America/Sao_Paulo' ? 'selected' : '' ?>>Horário de Brasília (São Paulo)</option>
+                    <option value="America/Manaus" <?= $configData['timezone'] === 'America/Manaus' ? 'selected' : '' ?>>Amazonas (Manaus)</option>
+                    <option value="America/Cuiaba" <?= $configData['timezone'] === 'America/Cuiaba' ? 'selected' : '' ?>>Mato Grosso (Cuiabá)</option>
+                    <option value="America/Rio_Branco" <?= $configData['timezone'] === 'America/Rio_Branco' ? 'selected' : '' ?>>Acre (Rio Branco)</option>
+                    <option value="America/Noronha" <?= $configData['timezone'] === 'America/Noronha' ? 'selected' : '' ?>>Fernando de Noronha</option>
+                    <option value="UTC" <?= $configData['timezone'] === 'UTC' ? 'selected' : '' ?>>UTC (Tempo Universal)</option>
+                </select>
+            </div>
+            
             <button type="submit" class="btn-submit">Salvar Configurações</button>
         </form>
 

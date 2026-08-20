@@ -2,6 +2,7 @@
 <html lang="pt-BR">
 <head>
     <?php require __DIR__ . '/partials/head.php'; ?>
+    <meta http-equiv="refresh" content="10">
     <title>Lista de Acessos</title>
     <link rel="stylesheet" href="/css/list.css?v=<?= filemtime(__DIR__ . '/../public/css/list.css') ?>">
     <link rel="stylesheet" href="/css/menu.css?v=<?= filemtime(__DIR__ . '/../public/css/menu.css') ?>">

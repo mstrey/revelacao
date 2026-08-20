@@ -14,7 +14,8 @@ class ConfigService {
             'reveal_date' => $data['reveal_date'] ?? '',
             'lucky_number' => (int)($data['lucky_number'] ?? 1),
             'boy_name' => $data['boy_name'] ?? '',
-            'girl_name' => $data['girl_name'] ?? ''
+            'girl_name' => $data['girl_name'] ?? '',
+            'timezone' => $data['timezone'] ?? 'America/Sao_Paulo'
         ]);
     }
 
@@ -23,7 +24,8 @@ class ConfigService {
             'reveal_date' => '',
             'lucky_number' => 1,
             'boy_name' => '',
-            'girl_name' => ''
+            'girl_name' => '',
+            'timezone' => 'America/Sao_Paulo'
         ];
         $data = $this->storage->load(self::CONFIG_FILE);
         return array_merge($defaults, $data);

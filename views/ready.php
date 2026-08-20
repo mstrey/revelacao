@@ -8,7 +8,7 @@
 <body>
     <main class="ready-card">
         <h1>O momento chegou!</h1>
-        <p>A contagem regressiva terminou. O resultado já está disponível para os dispositivos na fila.</p>
+        <p>A contagem regressiva terminou. Clique no botão abaixo para descobrir se você foi sorteado para divulgar o resultado.</p>
         
         <form method="POST" action="/">
             <button type="submit" class="btn-reveal" aria-label="Descobrir o resultado do sexo do bebê">Descobrir Resultado</button>

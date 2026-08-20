@@ -36,7 +36,8 @@ label {
 }
 input[type="text"],
 input[type="number"],
-input[type="datetime-local"] {
+input[type="datetime-local"],
+select {
     width: 100%;
     padding: 12px 15px;
     border: 1px solid #ccc;
@@ -45,7 +46,8 @@ input[type="datetime-local"] {
     background-color: #fafafa;
     transition: border-color 0.3s;
 }
-input:focus {
+input:focus,
+select:focus {
     border-color: #333;
     outline: none;
     background-color: #fff;
