@@ -16,6 +16,10 @@
             <div class="alert-success" role="alert">Configurações salvas com sucesso!</div>
         <?php } ?>
 
+        <?php if (isset($_GET['cleared'])) { ?>
+            <div class="alert-info" role="alert">A lista de visitantes foi zerada com sucesso!</div>
+        <?php } ?>
+
         <form method="POST">
             <div class="form-group">
                 <label for="reveal_date">Data e Hora da Revelação</label>
@@ -39,6 +43,15 @@
 
             <button type="submit" class="btn-submit">Salvar Configurações</button>
         </form>
+
+        <div class="danger-zone">
+            <h2>Gerenciamento de Dados</h2>
+            <p style="color: #666; margin-bottom: 15px;">Ao executar esta ação, todos os registros de acesso dos dispositivos serão apagados permanentemente.</p>
+            <form method="POST" onsubmit="return confirm('Tem certeza que deseja zerar a lista de visitantes? Esta ação não pode ser desfeita.');">
+                <input type="hidden" name="action" value="clear_visitors">
+                <button type="submit" class="btn-submit btn-danger">Zerar Lista de Visitantes</button>
+            </form>
+        </div>
     </main>
 </body>
 </html>

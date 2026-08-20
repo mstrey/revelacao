@@ -86,4 +86,8 @@ class RevealService {
     public function getVisitorsList(): array {
         return $this->storage->load('visitors');
     }
+
+    public function clearVisitors(): void {
+        $this->storage->save('visitors', []);
+    }
 }
